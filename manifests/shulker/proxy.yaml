@@ -1,0 +1,18 @@
+apiVersion: shulkermc.io/v1alpha1
+kind: ProxyFleet
+metadata:
+  name: public
+  namespace: miners-online
+spec:
+  clusterRef:
+    name: miners-online
+  replicas: 1
+  service:
+    type: LoadBalancer
+    externalTrafficPolicy: Local
+  template:
+    spec:
+      version:
+        channel: Velocity
+        name: latest
+      config: {}

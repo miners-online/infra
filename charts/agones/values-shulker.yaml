@@ -1,0 +1,28 @@
+# Agones Helm values configured for Shulker integration
+# Helm chart version: 1.52.0
+# Reference: https://agones.dev/site/docs/installation/install-agones/helm/
+
+gameservers:
+  # Add shulker-system namespace to allow Shulker components to create GameServers
+  namespaces:
+  - shulker-system
+
+agones:
+  controller:
+    # Generate TLS for webhooks (set to false if providing your own certificates)
+    generateTLS: true
+  
+  allocator:
+    # Enable allocator for Shulker to allocate GameServers
+    install: true
+    generateTLS: true
+    generateClientTLS: true  # Generate client TLS certificates
+    # Use ClusterIP for internal-only access (recommended for manual deployments)
+    service:
+      serviceType: ClusterIP
+    # Create allocator client secret in all GameServer namespaces
+    createClientSecret: true
+
+# Do not cleanup CRDs on helm uninstall (manual control over lifecycle)
+crds:
+  cleanupOnDelete: false

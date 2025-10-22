@@ -1,0 +1,19 @@
+apiVersion: shulkermc.io/v1alpha1
+kind: MinecraftServerFleet
+metadata:
+  name: lobby
+  namespace: miners-online
+spec:
+  clusterRef:
+    name: miners-online
+  replicas: 1
+  template:
+    spec:
+      clusterRef:
+        name: miners-online
+      tags:
+        - lobby
+      version:
+        channel: Paper
+        name: "1.21.8"
+      config: {}

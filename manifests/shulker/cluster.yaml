@@ -1,0 +1,8 @@
+apiVersion: shulkermc.io/v1alpha1
+kind: MinecraftCluster
+metadata:
+  name: miners-online
+  namespace: miners-online
+spec:
+  networkAdmins:
+    - c3e994d7-7699-4264-a3a7-5f0342a961dc
