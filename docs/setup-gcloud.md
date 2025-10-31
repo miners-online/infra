@@ -51,11 +51,11 @@ gcloud services enable containerregistry.googleapis.com
 ### 1.3 Configure Default Region/Zone (Optional)
 
 ```bash
-# Set default region (choose based on your needs: us-central1, europe-west1, asia-east1, etc.)
-gcloud config set compute/region us-central1
+# Set default region (choose based on your needs: europe-west2, europe-west1, asia-east1, etc.)
+gcloud config set compute/region europe-west2
 
 # Set default zone
-gcloud config set compute/zone us-central1-a
+gcloud config set compute/zone europe-west2-a
 ```
 
 ## Phase 2: Create GKE Cluster
@@ -68,19 +68,19 @@ Choose the appropriate command based on your requirements:
 
 ```bash
 gcloud container clusters create miners-online \
-  --region us-central1 \
-  --num-nodes 3 \
-  --machine-type n1-standard-4
+  --region europe-west2-a \
+  --num-nodes 6 \
+  --machine-type n2-standard-32-gdc
 ```
 
 **Option B: Cluster with more configuration (Recommended for Production)**
 
 ```bash
 gcloud container clusters create miners-online \
-  --region us-central1 \
-  --zone us-central1-a \
-  --num-nodes 3 \
-  --machine-type n1-standard-4 \
+  --region europe-west2-a \
+  --zone europe-west2-a \
+  --num-nodes 6 \
+  --machine-type n2-standard-32-gdc \
   --enable-ip-alias \
   --enable-stackdriver-kubernetes \
   --addons HttpLoadBalancing,HttpsLoadBalancing \
@@ -92,19 +92,19 @@ gcloud container clusters create miners-online \
 
 ```bash
 gcloud container clusters create miners-online \
-  --region us-central1 \
-  --initial-node-count 3 \
-  --machine-type n1-standard-4 \
+  --region europe-west2-a \
+  --node-count 6 \
+  --machine-type n2-standard-32-gdc \
   --enable-autoscaling \
   --min-nodes 1 \
-  --max-nodes 10
+  --max-nodes 20
 ```
 
 ### 2.2 Monitor Cluster Creation
 
 The cluster creation process typically takes 5-10 minutes. You can monitor progress in:
 - Google Cloud Console: [https://console.cloud.google.com/kubernetes/list](https://console.cloud.google.com/kubernetes/list)
-- Terminal: Use `gcloud container clusters describe miners-online --region us-central1` to check status
+- Terminal: Use `gcloud container clusters describe miners-online --region europe-west2` to check status
 
 ### 2.3 Get Cluster Credentials
 
@@ -112,7 +112,7 @@ Once the cluster is created, configure `kubectl` to access it:
 
 ```bash
 # Get credentials for your GKE cluster
-gcloud container clusters get-credentials miners-online --region us-central1
+gcloud container clusters get-credentials miners-online --region europe-west2
 
 # Verify connectivity to the cluster
 kubectl cluster-info
@@ -357,7 +357,7 @@ Configure automatic scaling of nodes based on resource demand:
 ```bash
 # Update cluster autoscaling settings
 gcloud container clusters update miners-online \
-  --region us-central1 \
+  --region europe-west2-a \
   --enable-autoscaling \
   --min-nodes 1 \
   --max-nodes 10
@@ -441,10 +441,10 @@ telnet YOUR_EXTERNAL_IP 25565
 kubectl -n miners-online get events --sort-by='.lastTimestamp'
 
 # Check cluster autoscaler status
-gcloud container clusters describe miners-online --region us-central1
+gcloud container clusters describe miners-online --region europe-west2
 
 # View GKE cluster in console
-gcloud container clusters describe miners-online --region us-central1 --format="table(status, masterStatus)"
+gcloud container clusters describe miners-online --region europe-west2-a --format="table(status, masterStatus)"
 
 # Check GKE operations
 gcloud container operations list
@@ -491,7 +491,7 @@ kubectl delete namespace agones-system
 
 ```bash
 # Delete the entire GKE cluster (WARNING: This is permanent)
-gcloud container clusters delete miners-online --region us-central1
+gcloud container clusters delete miners-online --region europe-west2
 
 # Confirm deletion when prompted
 ```
@@ -505,7 +505,7 @@ gsutil rm -r gs://miners-online-backups
 
 # Delete any persistent disks (if created)
 gcloud compute disks list
-gcloud compute disks delete <disk-name> --zone us-central1-a
+gcloud compute disks delete <disk-name> --zone europe-west2-a
 ```
 
 ## Cost Optimization Tips
@@ -515,7 +515,7 @@ gcloud compute disks delete <disk-name> --zone us-central1-a
    gcloud container clusters create miners-online \
      --preemptible \
      --num-nodes 3 \
-     --region us-central1
+     --region europe-west2
    ```
 
 2. **Use smaller machine types** during testing and scale up for production
