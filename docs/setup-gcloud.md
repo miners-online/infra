@@ -68,19 +68,19 @@ Choose the appropriate command based on your requirements:
 
 ```bash
 gcloud container clusters create miners-online \
-  --region europe-west2-a \
+  --region europe-west2 \
   --num-nodes 6 \
-  --machine-type n2-standard-32-gdc
+  --machine-type n2-standard-32
 ```
 
 **Option B: Cluster with more configuration (Recommended for Production)**
 
 ```bash
 gcloud container clusters create miners-online \
-  --region europe-west2-a \
+  --region europe-west2 \
   --zone europe-west2-a \
   --num-nodes 6 \
-  --machine-type n2-standard-32-gdc \
+  --machine-type n2-standard-32 \
   --enable-ip-alias \
   --enable-stackdriver-kubernetes \
   --addons HttpLoadBalancing,HttpsLoadBalancing \
@@ -92,9 +92,9 @@ gcloud container clusters create miners-online \
 
 ```bash
 gcloud container clusters create miners-online \
-  --region europe-west2-a \
+  --region europe-west2 \
   --node-count 6 \
-  --machine-type n2-standard-32-gdc \
+  --machine-type n2-standard-32 \
   --enable-autoscaling \
   --min-nodes 1 \
   --max-nodes 20
