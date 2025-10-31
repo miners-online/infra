@@ -4,6 +4,6 @@ kind: Kustomization
 namespace: miners-online
 
 resources:
-  - ../../../manifests/shulker/cluster.yaml
-  - ../../../manifests/shulker/proxy.yaml
-  - ../../../manifests/shulker/lobby.yaml
+  - ./manifests/shulker/cluster.yaml
+  - ./manifests/shulker/proxy.yaml
+  - ./manifests/shulker/lobby.yaml

@@ -63,9 +63,9 @@ Create the dedicated `miners-online` namespace and apply the Shulker cluster, pr
 kubectl create namespace miners-online
 
 # Apply manifests (for cloud deployments with LoadBalancer support)
-kubectl apply -f manifests/shulker/cluster.yaml
-kubectl apply -f manifests/shulker/proxy.yaml
-kubectl apply -f manifests/shulker/lobby.yaml
+kubectl apply -f kustomize/base/manifests/shulker/cluster.yaml
+kubectl apply -f kustomize/base/manifests/shulker/proxy.yaml
+kubectl apply -f kustomize/base/manifests/shulker/lobby.yaml
 
 # Verify resources are created
 kubectl -n miners-online get minecraftclusters
@@ -129,9 +129,9 @@ Then open Minecraft and connect to the server address.
 
 ```bash
 # Delete Minecraft resources
-kubectl delete -f manifests/shulker/lobby.yaml
-kubectl delete -f manifests/shulker/proxy.yaml
-kubectl delete -f manifests/shulker/cluster.yaml
+kubectl delete -f kustomize/base/manifests/shulker/lobby.yaml
+kubectl delete -f kustomize/base/manifests/shulker/proxy.yaml
+kubectl delete -f kustomize/base/manifests/shulker/cluster.yaml
 
 # Wait for resources to drain (~1 minute)
 kubectl -n miners-online get all
