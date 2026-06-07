@@ -1,0 +1,398 @@
+# ╔══════════════════════════════════════════════════════════════════╗
+# ║           VelocityNavigator — Configuration File               ║
+# ║     Premium lobby navigation for Velocity proxy networks        ║
+# ╠══════════════════════════════════════════════════════════════════╣
+# ║  Docs & Wiki : https://github.com/sdemonzdevelopment-spec/VelocityNavigator/wiki║
+# ║  Support     : https://discord.com/invite/GYsTt96ypf            ║
+# ║  bStats      : https://bstats.org/plugin/velocity/Velocity%20Navigator/28341 ║
+# ╚══════════════════════════════════════════════════════════════════╝
+#
+# This file is auto-generated and self-documenting. Every key has
+# a description and a link to the relevant wiki section. Feel free
+# to edit it — your changes are preserved across upgrades.
+#
+# Tip: Run /vn reload after saving changes. No proxy restart needed!
+
+# Internal config schema version. Do NOT change this manually.
+# VelocityNavigator uses it to auto-migrate your settings on upgrade.
+# Wiki: https://github.com/sdemonzdevelopment-spec/VelocityNavigator/wiki/Configuration-Guide#config_version
+config_version = 6
+
+# Check for plugin updates when the proxy starts.
+# Wiki: https://github.com/sdemonzdevelopment-spec/VelocityNavigator/wiki/Configuration-Guide#notify_on_startup
+notify_on_startup = true
+
+# Show an in-game update notification to admins when they join.
+# Wiki: https://github.com/sdemonzdevelopment-spec/VelocityNavigator/wiki/Configuration-Guide#notify_admins_on_join
+notify_admins_on_join = true
+
+# ┌─────────────────────────────────────────────────────────────────┐
+# │  STARTUP — First-run welcome & upgrade digest                  │
+# └─────────────────────────────────────────────────────────────────┘
+[startup]
+
+# Display a welcome banner on fresh installs and a changelog digest
+# when upgrading from a previous version.
+# Wiki: https://github.com/sdemonzdevelopment-spec/VelocityNavigator/wiki/Configuration-Guide#startup_welcome_enabled
+welcome_enabled = true
+
+# The wiki homepage URL used in console messages and config comments.
+# Wiki: https://github.com/sdemonzdevelopment-spec/VelocityNavigator/wiki/Configuration-Guide#startup_wiki_url
+wiki_url = "https://github.com/sdemonzdevelopment-spec/VelocityNavigator/wiki"
+
+# ┌─────────────────────────────────────────────────────────────────┐
+# │  COMMANDS — Player-facing & admin commands                      │
+# └─────────────────────────────────────────────────────────────────┘
+[commands]
+
+# Primary lobby command name. Players type /<primary> to navigate.
+# Wiki: https://github.com/sdemonzdevelopment-spec/VelocityNavigator/wiki/Commands#primary
+primary = "lobby"
+
+# Additional command aliases (e.g. /hub, /spawn) that behave like /<primary>.
+# Wiki: https://github.com/sdemonzdevelopment-spec/VelocityNavigator/wiki/Commands#aliases
+aliases = ["hub", "spawn"]
+
+# Permission node required to use the lobby command.
+# Set to "none" for no permission check (recommended for public servers).
+# Wiki: https://github.com/sdemonzdevelopment-spec/VelocityNavigator/wiki/Commands#permission
+permission = "none"
+
+# Admin command labels. First entry is primary (e.g. /velocitynavigator).
+# Wiki: https://github.com/sdemonzdevelopment-spec/VelocityNavigator/wiki/Commands#admin_aliases
+admin_aliases = ["velocitynavigator", "vn"]
+
+# Cooldown between lobby commands per player (seconds). 0 = disabled.
+# Wiki: https://github.com/sdemonzdevelopment-spec/VelocityNavigator/wiki/Commands#cooldown_seconds
+cooldown_seconds = 3
+
+# Allow /lobby to reconnect the player even if they're already on the
+# selected server. Set to false to show "already connected" instead.
+# Wiki: https://github.com/sdemonzdevelopment-spec/VelocityNavigator/wiki/Commands#reconnect_if_same_server
+reconnect_if_same_server = false
+
+# ┌─────────────────────────────────────────────────────────────────┐
+# │  ROUTING — The brain of VelocityNavigator                      │
+# │                                                                 │
+# │  How players are matched to lobby servers. Choose an algorithm, │
+# │  list your lobbies, and tune retry/affinity behavior.           │
+# └─────────────────────────────────────────────────────────────────┘
+[routing]
+
+# Routing algorithm that decides which lobby a player is sent to.
+#
+#   least_players       — Fewest players (default, great all-rounder)
+#   round_robin         — Even rotation across lobbies
+#   random              — Random pick (simple, fast)
+#   power_of_two        — Pick 2 random, choose the lighter one (O(1) optimal)
+#   weighted_round_robin — Proportional traffic based on server weights
+#   least_connections   — Lowest EMA connection load
+#   consistent_hash     — Deterministic player-to-server mapping
+#   latency             — Lowest health-check ping time
+#
+# Wiki: https://github.com/sdemonzdevelopment-spec/VelocityNavigator/wiki/Routing-Algorithms
+selection_mode = "least_players"
+
+# Prefer sending players to a DIFFERENT lobby than the one they are on.
+# Only applies when multiple candidates are available.
+# Wiki: https://github.com/sdemonzdevelopment-spec/VelocityNavigator/wiki/Routing-Algorithms#cycle_when_possible
+cycle_when_possible = true
+
+# Load-balance players the moment they connect to the proxy, not only
+# when they type /lobby. Highly recommended for large networks.
+# Wiki: https://github.com/sdemonzdevelopment-spec/VelocityNavigator/wiki/Initial-Join-Balancing
+balance_initial_join = true
+
+# Your lobby servers. Entries can be plain strings or inline tables:
+#
+#   "lobby-1"                                          — simple
+#   { server = "lobby-1", max_players = 100 }          — with cap
+#   { server = "lobby-1", max_players = 100, weight = 2 } — with cap + weight
+#
+# Wiki: https://github.com/sdemonzdevelopment-spec/VelocityNavigator/wiki/Configuration-Guide#default_lobbies
+default_lobbies = ["lobby-1", "lobby-2"]
+
+# How many times to retry a different lobby if the first connection fails.
+# Wiki: https://github.com/sdemonzdevelopment-spec/VelocityNavigator/wiki/Configuration-Guide#max_retries
+max_retries = 2
+
+# Show an interactive click-to-connect chat menu instead of auto-routing.
+# Players can also type /lobby menu to trigger it manually.
+use_chat_menu_for_lobby = false
+
+# Header line printed above the chat menu (MiniMessage supported).
+chat_menu_header = "<gradient:#8EF7FF:#D9F7FF><bold>Lobby Selector</bold></gradient> <gray>(Hover to view status, click to connect)</gray>"
+
+# Line format for each lobby entry in the chat menu.
+# Placeholders: {server}, {players}, {max_players}, {status}, {status_color}, {ping}
+chat_menu_format = "  <gray>•</gray> <white><bold>{server}</bold></white> <gray>| Click to connect</gray>"
+
+# Hover tooltip shown over each lobby entry in the chat menu.
+# Placeholders: {server}, {players}, {max_players}, {status}, {status_color}, {ping}
+chat_menu_tooltip = "<white><bold>{server}</bold></white>\n<gray>Status:</gray> {status_color}{status}\n<gray>Players:</gray> <white>{players}/{max_players}</white>\n<gray>Ping:</gray> <white>{ping}ms</white>"
+
+# ── Player Affinity (Sticky Sessions) ──────────────────────────────
+[routing.affinity]
+
+# Remember which lobby a player was on and try to send them back.
+# Wiki: https://github.com/sdemonzdevelopment-spec/VelocityNavigator/wiki/Configuration-Guide#affinity_enabled
+enabled = true
+
+# Probability (0.0–1.0) of returning the player to their last lobby.
+# 0.0 = never sticky, 1.0 = always sticky.
+# Wiki: https://github.com/sdemonzdevelopment-spec/VelocityNavigator/wiki/Configuration-Guide#affinity_stickiness
+stickiness = 0.7
+
+# ┌─────────────────────────────────────────────────────────────────┐
+# │  CONTEXTUAL ROUTING — Game-mode-aware lobby selection           │
+# │                                                                 │
+# │  Route players to specific lobbies depending on which server    │
+# │  they are leaving. Great for game modes with dedicated lobbies.  │
+# └─────────────────────────────────────────────────────────────────┘
+[routing.contextual]
+
+# Enable source-server-aware routing.
+# Wiki: https://github.com/sdemonzdevelopment-spec/VelocityNavigator/wiki/Contextual-Routing-Guide
+enabled = false
+
+# If no servers in the matched group are online, fall back to default lobbies.
+# Wiki: https://github.com/sdemonzdevelopment-spec/VelocityNavigator/wiki/Configuration-Guide#contextual_fallback_to_default
+fallback_to_default = true
+
+# ── Contextual Groups ───────────────────────────────────────────────
+# Define named groups of lobby servers. Each group can optionally
+# override the global selection_mode with its own "mode" field.
+#
+# Example:
+#   [routing.contextual.groups]
+#   "bedwars"  = { servers = ["bw-lobby-1", "bw-lobby-2"], mode = "round_robin" }
+#   "skyblock" = ["sb-lobby-1"]
+#
+# Wiki: https://github.com/sdemonzdevelopment-spec/VelocityNavigator/wiki/Contextual-Routing-Guide#groups
+[routing.contextual.groups]
+"bedwars" = ["bedwars-lobby-1", "bedwars-lobby-2"]
+
+# ── Source Mappings ────────────────────────────────────────────────
+# Map a source server name → contextual group name.
+# When a player leaves "bedwars-1", they'll be routed to the "bedwars" group.
+#
+# Wiki: https://github.com/sdemonzdevelopment-spec/VelocityNavigator/wiki/Contextual-Routing-Guide#sources
+[routing.contextual.sources]
+"bedwars-1" = "bedwars"
+
+# ┌─────────────────────────────────────────────────────────────────┐
+# │  LOBBY FALLBACK — What happens when no lobbies are available    │
+# └─────────────────────────────────────────────────────────────────┘
+[lobby]
+
+# What to do when every lobby is offline or circuit-broken.
+#   "disconnect"      — Disconnect the player with a message
+#   "fallback_server" — Route to a backup fallback server instead
+# Wiki: https://github.com/sdemonzdevelopment-spec/VelocityNavigator/wiki/Configuration-Guide#lobby_no_server_strategy
+no_server_strategy = "disconnect"
+
+# Disconnect message shown when strategy = "disconnect".
+# Wiki: https://github.com/sdemonzdevelopment-spec/VelocityNavigator/wiki/Configuration-Guide#lobby_no_server_message
+no_server_message = "<red>No lobby servers are currently available. Please try again later.</red>"
+
+# Backup server name used when strategy = "fallback_server".
+# Wiki: https://github.com/sdemonzdevelopment-spec/VelocityNavigator/wiki/Configuration-Guide#lobby_fallback_server
+fallback_server = ""
+
+# ┌─────────────────────────────────────────────────────────────────┐
+# │  HEALTH CHECKS — Verify servers are alive before routing        │
+# └─────────────────────────────────────────────────────────────────┘
+[health_checks]
+
+# Ping candidate lobbies before sending a player. Prevents routing
+# to offline servers. Strongly recommended.
+# Wiki: https://github.com/sdemonzdevelopment-spec/VelocityNavigator/wiki/Configuration-Guide#health_checks_enabled
+enabled = true
+
+# Timeout in milliseconds before a health-check ping is considered failed.
+# Wiki: https://github.com/sdemonzdevelopment-spec/VelocityNavigator/wiki/Configuration-Guide#health_checks_timeout_ms
+timeout_ms = 2500
+
+# Cache health results for this many seconds. Reduces network load.
+# Set to 0 to ping on every request (not recommended for large networks).
+# Wiki: https://github.com/sdemonzdevelopment-spec/VelocityNavigator/wiki/Configuration-Guide#health_checks_cache_seconds
+cache_seconds = 60
+
+# ┌─────────────────────────────────────────────────────────────────┐
+# │  CIRCUIT BREAKER — Automatic failure detection & recovery       │
+# │                                                                 │
+# │  State machine: CLOSED → OPEN → HALF_OPEN → CLOSED             │
+# │  Unhealthy servers are skipped until they prove they've recovered. │
+# └─────────────────────────────────────────────────────────────────┘
+[circuit_breaker]
+
+# Enable the circuit breaker. When enabled, servers that fail
+# health checks repeatedly are temporarily removed from routing.
+# Wiki: https://github.com/sdemonzdevelopment-spec/VelocityNavigator/wiki/Configuration-Guide#circuit_breaker_enabled
+enabled = true
+
+# Number of consecutive failures before the circuit trips OPEN.
+# Wiki: https://github.com/sdemonzdevelopment-spec/VelocityNavigator/wiki/Configuration-Guide#circuit_breaker_failure_threshold
+failure_threshold = 3
+
+# Seconds to wait in OPEN state before allowing a test in HALF_OPEN.
+# Wiki: https://github.com/sdemonzdevelopment-spec/VelocityNavigator/wiki/Configuration-Guide#circuit_breaker_cooldown_seconds
+cooldown_seconds = 30
+
+# Successful test connections needed in HALF_OPEN to close the circuit.
+# Wiki: https://github.com/sdemonzdevelopment-spec/VelocityNavigator/wiki/Configuration-Guide#circuit_breaker_half_open_max_tests
+half_open_max_tests = 1
+
+# ┌─────────────────────────────────────────────────────────────────┐
+# │  MESSAGES — All player-facing text (MiniMessage format)         │
+# │                                                                 │
+# │  Available placeholders:                                        │
+# │    <server>  <player>  <time>  <reason>  <mode>                 │
+# │    <attempt>  <max>                                             │
+# └─────────────────────────────────────────────────────────────────┘
+[messages]
+
+# Wiki: https://github.com/sdemonzdevelopment-spec/VelocityNavigator/wiki/Configuration-Guide#messages
+connecting = "<aqua>Sending you to <server>...</aqua>"
+already_connected = "<yellow>You are already connected to <server>.</yellow>"
+no_lobby_found = "<red>No available lobby could be found. (<reason>)</red>"
+player_only = "<gray>This command can only be used by a player.</gray>"
+cooldown = "<yellow>Please wait <time> more second(s).</yellow>"
+reload_success = "<green>VelocityNavigator reloaded.</green>"
+reload_failed = "<red>Reload failed. Check console for details.</red>"
+retrying = "<yellow>Retrying connection... (<attempt>/<max>)</yellow>"
+
+# Color code handling: "auto" (detect & convert), "minimessage", or "legacy".
+# Wiki: https://github.com/sdemonzdevelopment-spec/VelocityNavigator/wiki/Configuration-Guide#messages_formatting
+formatting = "auto"
+
+# Status tag colors for the /vn servers dashboard (MiniMessage/hex).
+# Wiki: https://github.com/sdemonzdevelopment-spec/VelocityNavigator/wiki/Configuration-Guide#messages_dashboard_colors
+dashboard_healthy = "<green>"
+dashboard_draining = "<yellow>"
+dashboard_open = "<red>"
+dashboard_offline = "<gray>"
+
+# ┌─────────────────────────────────────────────────────────────────┐
+# │  UPDATE CHECKER — Automatic Modrinth version checking           │
+# └─────────────────────────────────────────────────────────────────┘
+[update_checker]
+
+# Enable periodic update checking via the Modrinth API.
+# Wiki: https://github.com/sdemonzdevelopment-spec/VelocityNavigator/wiki/Configuration-Guide#update_checker_enabled
+enabled = true
+
+# Which release channel to follow: "release", "beta", or "alpha".
+# Wiki: https://github.com/sdemonzdevelopment-spec/VelocityNavigator/wiki/Configuration-Guide#update_checker_channel
+channel = "release"
+
+# Minutes between update checks (minimum: 30). Backoff is applied
+# automatically if the API returns 429 Too Many Requests.
+# Wiki: https://github.com/sdemonzdevelopment-spec/VelocityNavigator/wiki/Configuration-Guide#update_checker_interval
+check_interval = 60
+
+# Notify online admins (velocitynavigator.admin) when they join.
+# Wiki: https://github.com/sdemonzdevelopment-spec/VelocityNavigator/wiki/Configuration-Guide#update_checker_notify_admins
+notify_admins = true
+
+# ┌─────────────────────────────────────────────────────────────────┐
+# │  BEDROCK — Geyser/Floodgate integration for Bedrock players    │
+# └─────────────────────────────────────────────────────────────────┘
+[bedrock]
+
+# Manually enable Bedrock support. When false, auto_detect takes over.
+# Wiki: https://github.com/sdemonzdevelopment-spec/VelocityNavigator/wiki/Configuration-Guide#bedrock_enabled
+enabled = false
+
+# Automatically enable Bedrock features if Geyser/Floodgate is detected.
+# Wiki: https://github.com/sdemonzdevelopment-spec/VelocityNavigator/wiki/Configuration-Guide#bedrock_auto_detect
+auto_detect = true
+
+# Strip gradients, hover events, and click actions for Bedrock clients.
+# Bedrock doesn't support advanced MiniMessage formatting natively.
+# Wiki: https://github.com/sdemonzdevelopment-spec/VelocityNavigator/wiki/Configuration-Guide#bedrock_strip_advanced_formatting
+strip_advanced_formatting = true
+
+# Use the Java UUID (mapped by Floodgate) for player affinity tracking.
+# Wiki: https://github.com/sdemonzdevelopment-spec/VelocityNavigator/wiki/Configuration-Guide#bedrock_affinity_use_java_uuid
+affinity_use_java_uuid = true
+
+# Show a native Bedrock SimpleForm GUI instead of chat-based menu.
+# Requires Floodgate to be installed alongside Geyser.
+use_gui_for_lobby = true
+
+# Bedrock GUI form customization.
+gui_title = "<gradient:#8EF7FF:#D9F7FF><bold>Lobby Selector</bold></gradient>"
+gui_content = "<gray>Select a lobby server to connect:</gray>"
+
+# Button text for each lobby in the Bedrock form. Placeholders: {server}, {players}
+gui_button_format = "<white><bold>{server}</bold></white> <gray>({players} Players)</gray>"
+
+# ┌─────────────────────────────────────────────────────────────────┐
+# │  METRICS — Telemetry & monitoring                               │
+# └─────────────────────────────────────────────────────────────────┘
+[metrics]
+
+# Enable anonymous bStats telemetry. Helps us understand plugin usage.
+# Wiki: https://github.com/sdemonzdevelopment-spec/VelocityNavigator/wiki/Configuration-Guide#metrics_enabled
+enabled = true
+
+# ── Prometheus Exporter ─────────────────────────────────────────────
+# Exposes real-time metrics at http://<bind_host>:<port>/metrics
+# Compatible with Prometheus, Grafana, and any OpenMetrics scraper.
+# Tip: Run /vn setup grafana to generate a ready-made dashboard!
+[metrics.prometheus]
+enabled = false
+port = 9225
+bind_host = "127.0.0.1"
+
+# Optional bearer token for authentication. Strongly recommended if
+# bind_host is not 127.0.0.1/localhost. Leave empty to disable.
+bearer_token = ""
+
+# ┌─────────────────────────────────────────────────────────────────┐
+# │  DEGRADATION — Graceful fallback when everything is down        │
+# └─────────────────────────────────────────────────────────────────┘
+[degradation]
+
+# When all health checks fail, use this fallback routing mode instead
+# of showing "no lobby found". Useful for keeping players connected.
+# Wiki: https://github.com/sdemonzdevelopment-spec/VelocityNavigator/wiki/Configuration-Guide#degradation_enabled
+enabled = true
+
+# Fallback algorithm: "random", "round_robin", or "least_players".
+# Wiki: https://github.com/sdemonzdevelopment-spec/VelocityNavigator/wiki/Configuration-Guide#degradation_mode
+mode = "random"
+
+# ┌─────────────────────────────────────────────────────────────────┐
+# │  GEO ROUTING — Location-based server selection (experimental)   │
+# └─────────────────────────────────────────────────────────────────┘
+[geo_routing]
+
+# Enable geographic IP-based routing using MaxMind GeoLite2.
+# This feature is experimental and may not affect routing in this build.
+# Wiki: https://github.com/sdemonzdevelopment-spec/VelocityNavigator/wiki/GeoIP-Database-Setup
+enabled = false
+
+# Absolute path to the GeoLite2-Country.mmdb or GeoLite2-City.mmdb file.
+# Wiki: https://github.com/sdemonzdevelopment-spec/VelocityNavigator/wiki/GeoIP-Database-Setup#database_path
+database_path = ""
+
+# ┌─────────────────────────────────────────────────────────────────┐
+# │  DEBUG — Diagnostic logging                                     │
+# └─────────────────────────────────────────────────────────────────┘
+[debug]
+
+# Print detailed routing decisions, health check results, and cache
+# events to the proxy console. Useful for troubleshooting.
+# Wiki: https://github.com/sdemonzdevelopment-spec/VelocityNavigator/wiki/Configuration-Guide#debug_verbose_logging
+verbose_logging = false
+
+# ╔══════════════════════════════════════════════════════════════════╗
+# ║  Thank you for using VelocityNavigator!                        ║
+# ║  Built with ❤ by DemonZ Development                            ║
+# ║                                                                 ║
+# ║  Questions? → https://discord.com/invite/GYsTt96ypf             ║
+# ║  Found a bug? → https://github.com/sdemonzdevelopment-spec/     ║
+# ║                 VelocityNavigator/issues                        ║
+# ╚══════════════════════════════════════════════════════════════════╝

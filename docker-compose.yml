@@ -1,0 +1,103 @@
+services:
+  mariadb:
+    image: mariadb:latest
+    container_name: mariadb
+    environment:
+      PUID: 1000
+      PGID: 1000
+      TZ: Europe/London
+      MARIADB_ROOT_PASSWORD_FILE: /run/secrets/mariadb_root_password
+    secrets:
+      - mariadb_root_password
+    volumes:
+      - ./run/mariadb_data:/var/lib/mysql
+    networks:
+      - minecraft
+    restart: unless-stopped
+
+  phpmyadmin:
+    image: lscr.io/linuxserver/phpmyadmin:latest
+    container_name: phpmyadmin
+    environment:
+      TZ: Europe/London
+      PMA_HOST: mariadb
+      PMA_USER: root
+      FILE__PMA_PASSWORD: /run/secrets/mariadb_root_password
+      PMA_ABSOLUTE_URI: https://phpmyadmin.minersonline.uk/
+    secrets:
+      - mariadb_root_password
+    networks:
+      - minecraft
+    ports:
+      - "127.0.0.1:8080:80"
+    restart: unless-stopped
+    depends_on:
+      - mariadb
+
+  proxy:
+    image: itzg/mc-proxy:latest
+    restart: unless-stopped
+    environment:
+      TYPE: "VELOCITY"
+      ICON: "https://github.com/miners-online/.github/blob/main/profile/logos/favicon-64x64.png?raw=true"
+      PLUGINS_FILE: "/config/plugins.txt"
+      REPLACE_ENV_VARIABLES: "true"
+      ENV_VARIABLE_PREFIX: "CFG_"
+      CFG_DB_PASSWORD_FILE: "/run/secrets/mariadb_root_password"
+    volumes:
+      - ./servers/proxy/config:/config
+    ports:
+      - '25565:25565' # Java Edition
+      - '25565:25565/udp' # Java Edition query
+      - '19132:19132/tcp' # Geyser listener
+      - '19132:19132/udp' # Geyser listener
+    secrets:
+      - velocity_forwarding_secret
+      - mariadb_root_password
+    networks:
+      - minecraft
+
+  lobby:
+    image: itzg/minecraft-server:latest
+    restart: unless-stopped
+    environment:
+      EULA: "TRUE"
+      TYPE: "FABRIC"
+      VERSION: "26.1.2"
+      USE_MEOWICE_FLAGS: "true"
+      MAX_MEMORY: "2G"
+
+      REPLACE_ENV_IN_PLACE: "true"
+      REPLACE_ENV_VARIABLE_PREFIX: "CFG_"
+
+      CFG_PROXY_SECRET_FILE: "/run/secrets/velocity_forwarding_secret"
+      CFG_DB_PASSWORD_FILE: "/run/secrets/mariadb_root_password"
+
+      REMOVE_OLD_MODS: "true"
+      MODRINTH_PROJECTS: |
+        fabric-api:E1mjhYMF
+        fabricproxy-lite:CsEpiziv
+        ferrite-core:d5ddUdiB
+        lithium:GiCfpS6V
+        styled-chat:N8ASEpbM
+        styledplayerlist:bzbuSIb1
+        luckperms:Nq5UZXxA
+        vanilla-permissions:bpq3ZDRl
+    depends_on:
+      - proxy
+    volumes:
+      - ./servers/lobby/config:/config
+    secrets:
+      - velocity_forwarding_secret
+      - mariadb_root_password
+    networks:
+      - minecraft
+
+networks:
+  minecraft:
+
+secrets:
+  velocity_forwarding_secret:
+    file: ./secrets/velocity_forwarding.txt
+  mariadb_root_password:
+    file: ./secrets/mariadb_root_password.txt
