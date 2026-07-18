@@ -8,8 +8,8 @@ To get started with the Miners Online Infrastructure, follow these steps:
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/miners-online/ifra.git
-   cd ifra
+   git clone https://github.com/miners-online/infra.git
+   cd infra
    ```
 2. Install Docker and Docker Compose if you haven't already. You can find installation instructions on the [Docker website](https://docs.docker.com/get-docker/).
 3. Create a `.env` file in the root directory of the project and configure the necessary environment variables. You can use the provided `.env.example` file as a template:
