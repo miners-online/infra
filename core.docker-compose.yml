@@ -20,7 +20,7 @@ services:
       - --certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json
       - --certificatesresolvers.letsencrypt.acme.dnschallenge.provider=cloudflare
     volumes:
-      - ./traefik/run/letsencrypt:/letsencrypt
+      - ./run/traefik/letsencrypt:/letsencrypt
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - traefik
@@ -72,7 +72,7 @@ services:
       MYSQL_USER: ""
       MYSQL_PASSWORD: ""
     volumes:
-      - ./mariadb/run/dbdata:/var/lib/mysql
+      - ./run/mariadb/dbdata:/var/lib/mysql
     ports:
       - '3306:3306'
     networks:
