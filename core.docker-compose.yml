@@ -76,7 +76,7 @@ services:
     ports:
       - '3306:3306'
     networks:
-      - core
+      - game-core
       # DO NOT PUT Traefik here, MariaDB is our database, and Traefik is only for web services. We don't want Traefik to try to route database traffic.
 
   phpmyadmin:
@@ -99,9 +99,12 @@ services:
     depends_on:
       - mariadb
     networks:
-      - core
+      - game-core
       - traefik
 
 networks:
-  core:
+  game-core:
+    external: true
   traefik:
+    external: true
+  # No minecraft network needed here

@@ -16,11 +16,17 @@ To get started with the Miners Online Infrastructure, follow these steps:
    ```bash
    cp .env.example .env
    ```
-4. Start the core services using Docker Compose:
+4. Create the necessary docker networks for the core and game services:
+   ```bash
+   docker network create game-core
+   docker network create minecraft
+   docker network create traefik
+   ```
+5. Start the core services using Docker Compose:
    ```bash
    docker compose -f core.docker-compose.yml up -d
    ```
-5. Start the game services using Docker Compose:
+6. Start the game services using Docker Compose:
    ```bash
    docker compose -f games.docker-compose.yml up -d
    ```
