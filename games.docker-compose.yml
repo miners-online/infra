@@ -1,3 +1,4 @@
+name: miners-online-games
 services:
   minecraft-proxy:
     image: itzg/mc-proxy:latest
