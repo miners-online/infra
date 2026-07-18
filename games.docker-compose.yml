@@ -1,0 +1,31 @@
+services:
+  minecraft-proxy:
+    image: itzg/mc-proxy:latest
+    restart: unless-stopped
+    environment:
+      TYPE: "VELOCITY"
+      ICON: "https://github.com/miners-online/.github/blob/main/profile/logos/favicon-64x64.png?raw=true"
+      PLUGINS_FILE: "/config/plugins.txt"
+
+      CFG_PROXY_SECRET_FILE: "/run/secrets/velocity_forwarding_secret"
+      CFG_DB_PASSWORD_FILE: "/run/secrets/mariadb_root_password_secret"
+    volumes:
+      - ./config/minecraft-proxy:/config
+    ports:
+      - '25565:25565' # Java Edition
+      - '25565:25565/udp' # Java Edition query
+      - '19132:19132/tcp' # Geyser listener
+      - '19132:19132/udp' # Geyser listener
+    depends_on:
+      - mariadb
+    secrets:
+      - mariadb_root_password_secret
+      - velocity_forwarding_secret
+    networks:
+      - core
+      - minecraft
+
+networks:
+  core:
+    external: true
+  minecraft:

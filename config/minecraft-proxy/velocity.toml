@@ -90,19 +90,20 @@ decompressed-bytes-per-second = 5242880
 [servers]
 # Configure your servers here. Each key represents the server's name, and the value
 # represents the IP address of the server to connect to.
-lobby-1 = "lobby:25565"
+lobby = "lobby:25565"
 survival = "desktop-0uc53li.netbird.cloud:35565"
-modded-creative = "desktop-0uc53li.netbird.cloud:35566"
+city-world = "desktop-0uc53li.netbird.cloud:35566"
 
 # In what order we should try servers when a player logs in or is kicked from a server.
+
 try = [
-    "lobby-1"
+    "lobby",
 ]
 
 [forced-hosts]
 # Configure your forced hosts here.
-"gone" = [
-    "lobby-1"
+"city-world.mc.minersonline.uk" = [
+    "city-world"
 ]
 
 [advanced]

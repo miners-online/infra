@@ -1,4 +1,4 @@
 *.pem
 *.env
-/secrets/*
-/run*
+*secret.txt
+**/run/

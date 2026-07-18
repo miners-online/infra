@@ -1,0 +1,107 @@
+services:
+  traefik:
+    image: traefik:v3.7
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8081:8080"
+    environment:
+      - ACME_EMAIL=${ACME_EMAIL}
+      - CF_DNS_API_TOKEN=${CF_DNS_API_TOKEN}
+    command:
+      - --api.insecure=true
+      - --entrypoints.web.address=:80
+      - --entrypoints.web.http.redirections.entrypoint.to=websecure
+      - --entrypoints.web.http.redirections.entrypoint.scheme=https
+      - --entrypoints.websecure.address=:443
+      - --providers.docker=true
+      - --providers.docker.exposedbydefault=false
+      - --certificatesresolvers.letsencrypt.acme.email=${ACME_EMAIL}
+      - --certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json
+      - --certificatesresolvers.letsencrypt.acme.dnschallenge.provider=cloudflare
+    volumes:
+      - ./traefik/run/letsencrypt:/letsencrypt
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - traefik
+
+  whoami:
+    image: traefik/whoami
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.whoami.rule=Host(`whoami.localhost`) || Host(`whoami.minersonline.uk`)
+      - traefik.http.routers.whoami.entrypoints=websecure
+      # TLS for wildcard domain
+      - traefik.http.routers.whoami.tls=true
+      - traefik.http.routers.whoami.tls.certresolver=letsencrypt
+      - traefik.http.routers.whoami.tls.domains[0].main=minersonline.uk
+      - traefik.http.routers.whoami.tls.domains[0].sans=*.minersonline.uk
+    networks:
+      - traefik
+
+  # ---------- FALLBACK ----------
+  fallback:
+    image: traefik/whoami
+    labels:
+      - traefik.enable=true
+      # Match ANY subdomain under your domain
+      - traefik.http.routers.fallback.rule=HostRegexp(`^.+\.minersonline\.uk$`)
+      - traefik.http.routers.fallback.entrypoints=websecure
+      # Make sure it only triggers if nothing else matched
+      - traefik.http.routers.fallback.priority=1
+      # TLS for wildcard domain
+      - traefik.http.routers.fallback.tls=true
+      - traefik.http.routers.fallback.tls.certresolver=letsencrypt
+      - traefik.http.routers.fallback.tls.domains[0].main=minersonline.uk
+      - traefik.http.routers.fallback.tls.domains[0].sans=*.minersonline.uk
+      # Redirect everything to apex domain
+      - traefik.http.routers.fallback.middlewares=fallback-redirect
+      - traefik.http.middlewares.fallback-redirect.redirectregex.regex=^https://.*$
+      - traefik.http.middlewares.fallback-redirect.redirectregex.replacement=https://www.minersonline.uk
+      - traefik.http.middlewares.fallback-redirect.redirectregex.permanent=true
+    networks:
+      - traefik
+
+  mariadb:
+    image: mariadb:latest
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MARIA_DB_ROOT_PASSWORD}
+      # Do not create a database, each plugin should create its own database, if needed.
+      MYSQL_DATABASE: ""
+      MYSQL_USER: ""
+      MYSQL_PASSWORD: ""
+    volumes:
+      - ./mariadb/run/dbdata:/var/lib/mysql
+    ports:
+      - '3306:3306'
+    networks:
+      - core
+      # DO NOT PUT Traefik here, MariaDB is our database, and Traefik is only for web services. We don't want Traefik to try to route database traffic.
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    restart: unless-stopped
+    environment:
+      PMA_HOST: mariadb
+      PMA_PORT: 3306
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.phpmyadmin.rule=Host(`phpmyadmin.localhost`) || Host(`phpmyadmin.minersonline.uk`)
+      - traefik.http.routers.phpmyadmin.entrypoints=websecure
+      # Set traefik network. traefik only has access to containers on the traefik network, so we need to tell it to use that network for this container.
+      - traefik.docker.network=traefik
+      # TLS for wildcard domain
+      - traefik.http.routers.phpmyadmin.tls=true
+      - traefik.http.routers.phpmyadmin.tls.certresolver=letsencrypt
+      - traefik.http.routers.phpmyadmin.tls.domains[0].main=minersonline.uk
+      - traefik.http.routers.phpmyadmin.tls.domains[0].sans=*.minersonline.uk
+    depends_on:
+      - mariadb
+    networks:
+      - core
+      - traefik
+
+networks:
+  core:
+  traefik:
