@@ -114,6 +114,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.server-announce.rule=Host(`api.localhost`) || Host(`api.minersonline.uk`)
       - traefik.http.routers.server-announce.entrypoints=websecure
+      - traefik.http.services.server-announce.loadbalancer.server.port=3000
       # TLS for wildcard domain
       - traefik.http.routers.server-announce.tls=true
       - traefik.http.routers.server-announce.tls.certresolver=letsencrypt
