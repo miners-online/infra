@@ -103,6 +103,25 @@ services:
       - game-core
       - traefik
 
+  server-announce:
+    image: ghcr.io/samuelh2005/serverannounce-backend:804002c6cc57b73f43f74700ff57ce835a220d4b
+    restart: unless-stopped
+    environment:
+      - CONFIG_PATH=/config.yaml
+    volumes:
+      - ./config/server-announce/config.yaml:/config.yaml:ro
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.server-announce.rule=Host(`api.localhost`) || Host(`api.minersonline.uk`)
+      - traefik.http.routers.server-announce.entrypoints=websecure
+      # TLS for wildcard domain
+      - traefik.http.routers.server-announce.tls=true
+      - traefik.http.routers.server-announce.tls.certresolver=letsencrypt
+      - traefik.http.routers.server-announce.tls.domains[0].main=minersonline.uk
+      - traefik.http.routers.server-announce.tls.domains[0].sans=*.minersonline.uk
+    networks:
+      - traefik
+
 networks:
   game-core:
     external: true

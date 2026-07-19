@@ -1,0 +1,16 @@
+server:
+  port: 3000
+  default_server_expiry: 300
+
+servers:
+  # - name: lobby1
+  #   address: 10.0.0.20:25565
+  #   group: lobby
+
+  - name: city-world
+    address: desktop-0uc53li.netbird.cloud:35566
+    forced_host: city-world.mc.minersonline.uk
+
+  - name: survival
+    address: desktop-0uc53li.netbird.cloud:35565
+    forced_host: survival.mc.minersonline.uk
