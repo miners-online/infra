@@ -104,7 +104,7 @@ services:
       - traefik
 
   server-announce:
-    image: ghcr.io/samuelh2005/serverannounce-backend:804002c6cc57b73f43f74700ff57ce835a220d4b
+    image: ghcr.io/samuelh2005/serverannounce-backend:8ffb851cfeb88e275413eecdcb02f1b473827016 
     restart: unless-stopped
     environment:
       - CONFIG_PATH=/config.yaml
