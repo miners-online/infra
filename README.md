@@ -20,7 +20,7 @@ To get started with the Miners Online Infrastructure, follow these steps:
    ```bash
    docker network create game-core
    docker network create minecraft
-   docker network create traefik
+   docker network create web
    ```
 5. Start the core services using Docker Compose:
    ```bash

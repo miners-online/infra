@@ -1,0 +1,35 @@
+{
+	email {$ACME_EMAIL}
+	acme_dns cloudflare {$CLOUDFLARE_API_TOKEN}
+}
+
+# Local/dev endpoints
+http://whoami.localhost {
+	reverse_proxy whoami:80
+}
+
+http://phpmyadmin.localhost {
+	reverse_proxy phpmyadmin:80
+}
+
+http://api.localhost {
+	reverse_proxy server-announce:3000
+}
+
+# Public endpoints
+whoami.minersonline.uk {
+	reverse_proxy whoami:80
+}
+
+phpmyadmin.minersonline.uk {
+	reverse_proxy phpmyadmin:80
+}
+
+api.minersonline.uk {
+	reverse_proxy server-announce:3000
+}
+
+# Catch-all redirect for any other subdomain
+*.minersonline.uk {
+	redir https://www.minersonline.uk{uri} temporary
+}
