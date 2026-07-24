@@ -1,0 +1,6 @@
+{
+	// The base URL of the server list API. This should point to an instance of the Server Announce backend.
+	baseUrl: "https://api.minersonline.uk/v1",
+	// The interval in milliseconds at which the server list will be cleaned up. This is the time between cleanup tasks.
+	cleanupIntervalMillis: 240000
+}

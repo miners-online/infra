@@ -1,0 +1,12 @@
+https://cdn.modrinth.com/data/1eAoo2KR/versions/cnfPzuFU/yet_another_config_lib_v3-3.9.6%2B26.2-fabric.jar?mr_download_reason=standalone
+https://cdn.modrinth.com/data/fdZkP5Bb/versions/bpq3ZDRl/vanilla-permissions-0.3.6%2B26.1.2.jar?mr_download_reason=standalone
+https://cdn.modrinth.com/data/DQIfKUHf/versions/dphV3ifd/styledplayerlist-3.12.0%2B26.2.jar?mr_download_reason=standalone
+https://cdn.modrinth.com/data/DOk6Gcdi/versions/ET58KKxg/styled-nicknames-1.13.0%2B26.2.jar?mr_download_reason=standalone
+https://cdn.modrinth.com/data/doqSKB0e/versions/A7ihc7ss/styled-chat-2.13.0%2B26.2.jar?mr_download_reason=standalone
+https://cdn.modrinth.com/data/c7m1mi73/versions/V1pYl7hL/PacketFixer-fabric-3.3.6.jar?mr_download_reason=standalone
+#https://download.luckperms.net/1652/fabric/LuckPerms-Fabric-5.5.65.jar
+https://cdn.modrinth.com/data/gvQqBUqZ/versions/UPNexAfy/lithium-fabric-0.25.2%2Bmc26.2.jar?mr_download_reason=standalone
+https://cdn.modrinth.com/data/lfHFW1mp/versions/abb2IyRm/journeymap-fabric-26.2-6.0.1.jar?mr_download_reason=standalone&mr_loader=fabric
+https://cdn.modrinth.com/data/uXXizFIs/versions/d5ddUdiB/ferritecore-9.0.0-fabric.jar?mr_download_reason=standalone
+https://cdn.modrinth.com/data/8dI2tmqs/versions/CsEpiziv/FabricProxy-Lite-2.12.0.jar?mr_download_reason=standalone
+https://cdn.modrinth.com/data/P7dR8mSH/versions/lVXlbH4w/fabric-api-0.155.2%2B26.2.jar?mr_download_reason=standalone
