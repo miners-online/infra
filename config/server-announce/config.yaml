@@ -9,8 +9,16 @@ servers:
 
   - name: city-world
     address: desktop-0uc53li.netbird.cloud:35566
-    forced_host: city-world.mc.minersonline.uk
+    tags:
+      velocity.forced_host: city-world.mc.minersonline.uk
+      enhanced_lobby.display_name: <red>City <blue> World
+      enhanced_lobby.icon: minecraft:bricks
+      enhanced_lobby.description: <orange>Inactive
 
   - name: survival
     address: desktop-0uc53li.netbird.cloud:35565
-    forced_host: survival.mc.minersonline.uk
+    tags:
+      velocity.forced_host: survival.mc.minersonline.uk
+      enhanced_lobby.display_name: <green>Survival
+      enhanced_lobby.icon: minecraft:iron_pickaxe
+      enhanced_lobby.description: Economy, land claiming, and capitalism on top of regular survival world. <orange>Not available 24/7

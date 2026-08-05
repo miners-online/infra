@@ -48,7 +48,7 @@ services:
       - web
 
   server-announce:
-    image: ghcr.io/samuelh2005/serverannounce-backend:8ffb851cfeb88e275413eecdcb02f1b473827016
+    image: ghcr.io/samuelh2005/serverannounce-backend:05866043ef7fd39c9817d3d04a3526a7f4d86177
     restart: unless-stopped
     environment:
       CONFIG_PATH: /config.yaml
