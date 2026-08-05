@@ -21,4 +21,4 @@ servers:
       velocity.forced_host: survival.mc.minersonline.uk
       enhanced_lobby.display_name: <green>Survival
       enhanced_lobby.icon: minecraft:iron_pickaxe
-      enhanced_lobby.description: Economy, land claiming, and capitalism on top of regular survival world. <orange>Not available 24/7
+      enhanced_lobby.description: Economy, land claiming, and capitalism on top of regular survival world. \n<orange>Not available 24/7
