@@ -1,4 +1,4 @@
-name: miners-online-core
+name: miners-online-web
 
 services:
   web-proxy:
