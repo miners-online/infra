@@ -33,6 +33,24 @@ services:
       - game-core
       - web
 
+  keycloak:
+    container_name: keycloak_app
+    image: quay.io/keycloak/keycloak:latest
+    restart: unless-stopped
+    environment:
+      KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN}
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
+      KC_HOSTNAME: ${KC_HOSTNAME}
+      KC_DB_URL: jdbc:mysql://mariadb:3306/keycloak
+      KC_DB: mysql
+      KC_DB_USERNAME:  ${KEYCLOAK_ADMIN}
+      KC_DB_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
+    networks:
+      - game-core
+      - web
+    command:
+      - start
+
 networks:
   game-core:
     external: true

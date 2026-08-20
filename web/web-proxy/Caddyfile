@@ -29,6 +29,10 @@ api.minersonline.uk {
 	reverse_proxy server-announce:3000
 }
 
+auth.minersonline.uk {
+	reverse_proxy keycloak:8080
+}
+
 # Catch-all redirect for any other subdomain
 *.minersonline.uk {
 	redir https://www.minersonline.uk{uri} temporary
