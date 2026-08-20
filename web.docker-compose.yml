@@ -51,6 +51,7 @@ services:
     command:
       - start
       - --http-enabled=true
+      - --proxy-headers=xforwarded
 
 networks:
   game-core:
