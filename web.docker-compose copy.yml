@@ -1,0 +1,41 @@
+name: miners-online-core
+
+services:
+  web-proxy:
+    build: ./web/web-proxy
+    restart: unless-stopped
+    environment:
+      ACME_EMAIL: ${ACME_EMAIL}
+      CLOUDFLARE_API_TOKEN: ${CF_DNS_API_TOKEN}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./run/web-proxy/data:/data
+      - ./run/web-proxy/config:/config
+      - ./config/web-proxy/Caddyfile:/etc/caddy/Caddyfile:ro
+    networks:
+      - web
+
+  whoami:
+    image: traefik/whoami
+    restart: unless-stopped
+    networks:
+      - web
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    restart: unless-stopped
+    environment:
+      PMA_HOST: mariadb
+      PMA_PORT: 3306
+    networks:
+      - game-core
+      - web
+
+networks:
+  game-core:
+    external: true
+  web:
+    external: true
+  # No minecraft network needed here
