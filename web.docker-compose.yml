@@ -49,7 +49,8 @@ services:
       - game-core
       - web
     command:
-      - start --http-enabled=true
+      - start
+      - --http-enabled=true
 
 networks:
   game-core:
