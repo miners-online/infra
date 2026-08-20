@@ -13,7 +13,7 @@ services:
     volumes:
       - ./run/web-proxy/data:/data
       - ./run/web-proxy/config:/config
-      - ./config/web-proxy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./web/web-proxy/Caddyfile:/etc/caddy/Caddyfile:ro
     networks:
       - web
 
