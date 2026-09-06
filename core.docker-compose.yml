@@ -20,7 +20,7 @@ services:
       PMA_HOST: mariadb
       PMA_PORT: 3306
     ports:
-      - "127.0.0.1:8080:80"
+      - "8080:80"
     networks:
       - game-core
 
@@ -32,7 +32,7 @@ services:
     volumes:
       - ./config/server-announce/config.yaml:/config.yaml:ro
     ports:
-      - "127.0.0.1:8081:3000"
+      - "8081:3000"
 
 networks:
   game-core:
