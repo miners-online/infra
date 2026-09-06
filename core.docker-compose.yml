@@ -13,6 +13,17 @@ services:
     networks:
       - game-core
 
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    restart: unless-stopped
+    environment:
+      PMA_HOST: mariadb
+      PMA_PORT: 3306
+    ports:
+      - "127.0.0.1:8080:80"
+    networks:
+      - game-core
+
   server-announce:
     image: ghcr.io/samuelh2005/serverannounce-backend:05866043ef7fd39c9817d3d04a3526a7f4d86177
     restart: unless-stopped
@@ -20,12 +31,10 @@ services:
       CONFIG_PATH: /config.yaml
     volumes:
       - ./config/server-announce/config.yaml:/config.yaml:ro
-    networks:
-      - web
+    ports:
+      - "127.0.0.1:8081:3000"
 
 networks:
   game-core:
-    external: true
-  web:
     external: true
   # No minecraft network needed here
