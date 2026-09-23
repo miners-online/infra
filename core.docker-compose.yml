@@ -19,9 +19,8 @@ services:
     environment:
       PMA_HOST: mariadb
       PMA_PORT: 3306
-    ports:
-      - "8080:80"
     networks:
+      - tunnel_net
       - game-core
 
   server-announce:
@@ -31,10 +30,12 @@ services:
       CONFIG_PATH: /config.yaml
     volumes:
       - ./config/server-announce/config.yaml:/config.yaml:ro
-    ports:
-      - "8081:3000"
+    networks:
+      - tunnel_net
 
 networks:
+  tunnel_net:
+    external: true
   game-core:
     external: true
   # No minecraft network needed here
