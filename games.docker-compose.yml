@@ -10,6 +10,7 @@ services:
 
       CFG_PROXY_SECRET: ${VELOCITY_FORWARDING_SECRET}
       CFG_DB_PASSWORD: ${MARIA_DB_ROOT_PASSWORD}
+      CFG_REDIS_REGISTRATION_SECRET: ${REDIS_REGISTRATION_SECRET}
     volumes:
       - ./config/minecraft-proxy:/config
     ports:

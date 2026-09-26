@@ -1,0 +1,491 @@
+# ╔══════════════════════════════════════════════════════════════════╗
+# ║           VelocityNavigator — Configuration File               ║
+# ║     Lobby routing and load balancing for Velocity proxies       ║
+# ╠══════════════════════════════════════════════════════════════════╣
+# ║  Docs & Wiki : https://github.com/DemonZ-Development/VelocityNavigator/wiki║
+# ║  Support     : https://discord.com/invite/GYsTt96ypf            ║
+# ║  Telemetry   : https://bstats.org/plugin/velocity/28341         ║
+# ╚══════════════════════════════════════════════════════════════════╝
+#   Full bStats page: https://bstats.org/plugin/velocity/Velocity%20Navigator/28341
+#
+# This file is auto-generated and self-documenting. Every key has
+# a description and a link to the relevant wiki section. Feel free
+# to edit it — your changes are preserved across upgrades.
+#
+# Tip: Run /vn reload after saving changes. No proxy restart needed!
+
+# Internal config schema version. Do NOT change this manually.
+# VelocityNavigator uses it to auto-migrate your settings on upgrade.
+# Wiki: https://github.com/DemonZ-Development/VelocityNavigator/wiki/Configuration-Guide#debug-and-top-level-settings
+config_version = 9
+
+# Check for plugin updates when the proxy starts.
+# Wiki: https://github.com/DemonZ-Development/VelocityNavigator/wiki/Configuration-Guide#debug-and-top-level-settings
+notify_on_startup = true
+
+# Show an in-game update notification to admins when they join.
+# Wiki: https://github.com/DemonZ-Development/VelocityNavigator/wiki/Configuration-Guide#debug-and-top-level-settings
+notify_admins_on_join = true
+
+# ┌─────────────────────────────────────────────────────────────────┐
+# │  STARTUP — First-run welcome & upgrade digest                  │
+# └─────────────────────────────────────────────────────────────────┘
+[startup]
+
+# Display a welcome banner on fresh installs and a changelog digest
+# when upgrading from a previous version.
+# Wiki: https://github.com/DemonZ-Development/VelocityNavigator/wiki/Configuration-Guide#startup-first-run-experience
+welcome_enabled = false
+
+# ┌─────────────────────────────────────────────────────────────────┐
+# │  COMMANDS — Player-facing & admin commands                      │
+# └─────────────────────────────────────────────────────────────────┘
+[commands]
+
+# Primary lobby command name. Players type /<primary> to navigate.
+# Wiki: https://github.com/DemonZ-Development/VelocityNavigator/wiki/Commands#primary
+primary = "lobby"
+
+# Additional command aliases (e.g. /hub, /spawn) that behave like /<primary>.
+# Wiki: https://github.com/DemonZ-Development/VelocityNavigator/wiki/Commands#aliases
+aliases = ["hub", "spawn"]
+
+# Permission node required to use the lobby command.
+# Set to "none" for no permission check (recommended for public servers).
+# Wiki: https://github.com/DemonZ-Development/VelocityNavigator/wiki/Commands#permission
+permission = "none"
+
+# Admin command labels. First entry is primary (e.g. /velocitynavigator).
+# Wiki: https://github.com/DemonZ-Development/VelocityNavigator/wiki/Commands#admin_aliases
+admin_aliases = ["velocitynavigator", "vn"]
+
+# Cooldown between lobby commands per player (seconds). 0 = disabled.
+# Wiki: https://github.com/DemonZ-Development/VelocityNavigator/wiki/Commands#cooldown_seconds
+cooldown_seconds = 3
+
+# Allow /lobby to reconnect the player even if they're already on the
+# selected server. Set to false to show "already connected" instead.
+# Wiki: https://github.com/DemonZ-Development/VelocityNavigator/wiki/Commands#reconnect_if_same_server
+reconnect_if_same_server = false
+
+# ┌─────────────────────────────────────────────────────────────────┐
+# │  ROUTING — The brain of VelocityNavigator                      │
+# │                                                                 │
+# │  How players are matched to lobby servers. Choose an algorithm, │
+# │  list your lobbies, and tune retry/affinity behavior.           │
+# └─────────────────────────────────────────────────────────────────┘
+[routing]
+
+# Routing algorithm that decides which lobby a player is sent to.
+#
+#   least_players       — Fewest players (default, great all-rounder)
+#   round_robin         — Even rotation across lobbies
+#   random              — Random pick (simple, fast)
+#   power_of_two        — Pick 2 random, choose the lighter one (O(1) optimal)
+#   weighted_round_robin — Proportional traffic based on server weights
+#   least_connections   — Lowest EMA connection load
+#   consistent_hash     — Deterministic player-to-server mapping
+#   latency             — Lowest health-check ping time
+#
+# Wiki: https://github.com/DemonZ-Development/VelocityNavigator/wiki/Routing-Algorithms
+selection_mode = "least_players"
+
+# Prefer sending players to a DIFFERENT lobby than the one they are on.
+# Only applies when multiple candidates are available.
+# Wiki: https://github.com/DemonZ-Development/VelocityNavigator/wiki/Routing-Algorithms#cycle_when_possible
+cycle_when_possible = true
+
+# Load-balance players the moment they connect to the proxy, not only
+# when they type /lobby. Highly recommended for large networks.
+# Wiki: https://github.com/DemonZ-Development/VelocityNavigator/wiki/Initial-Join-Balancing
+balance_initial_join = true
+
+# Your lobby servers. Entries can be plain strings or inline tables:
+#
+#   "lobby-1"                                          — simple
+#   { server = "lobby-1", max_players = 100 }          — with cap
+#   { server = "lobby-1", max_players = 100, weight = 2 } — with cap + weight
+#
+# Wiki: https://github.com/DemonZ-Development/VelocityNavigator/wiki/Configuration-Guide#routing-core
+default_lobbies = ["lobby-1", "lobby-2"]
+
+# How many times to retry a different lobby if the first connection fails.
+# Wiki: https://github.com/DemonZ-Development/VelocityNavigator/wiki/Configuration-Guide#routing-core
+max_retries = 2
+
+# Show the configured interactive menu instead of auto-routing.
+# Players can also type /lobby menu to trigger it manually.
+use_menu_for_lobby = false
+
+# Java selector: "inventory" uses the backend bridge; "chat" uses hover/click text.
+# Install this same JAR on backend Paper/Spigot servers for inventory mode.
+[routing.java_menu]
+type = "inventory"
+fallback_to_chat = true
+
+# ── Player Affinity (Sticky Sessions) ──────────────────────────────
+[routing.affinity]
+
+# Remember which lobby a player was on and try to send them back.
+# Wiki: https://github.com/DemonZ-Development/VelocityNavigator/wiki/Configuration-Guide#routingaffinity
+enabled = true
+
+# Probability (0.0–1.0) of returning the player to their last lobby.
+# 0.0 = never sticky, 1.0 = always sticky.
+# Wiki: https://github.com/DemonZ-Development/VelocityNavigator/wiki/Configuration-Guide#routingaffinity
+stickiness = 0.7
+
+# ┌─────────────────────────────────────────────────────────────────┐
+# │  CONTEXTUAL ROUTING — Game-mode-aware lobby selection           │
+# │                                                                 │
+# │  Route players to specific lobbies depending on which server    │
+# │  they are leaving. Great for game modes with dedicated lobbies.  │
+# └─────────────────────────────────────────────────────────────────┘
+[routing.contextual]
+
+# Enable source-server-aware routing.
+# Wiki: https://github.com/DemonZ-Development/VelocityNavigator/wiki/Contextual-Routing-Guide
+enabled = false
+
+# If no servers in the matched group are online, fall back to default lobbies.
+# Wiki: https://github.com/DemonZ-Development/VelocityNavigator/wiki/Configuration-Guide#routingcontextual
+fallback_to_default = true
+
+# ── Contextual Groups ───────────────────────────────────────────────
+# Define named groups of lobby servers. Each group can optionally
+# override the global selection_mode with its own "mode" field.
+#
+# Example:
+#   [routing.contextual.groups]
+#   "bedwars"  = { servers = ["bw-lobby-1", "bw-lobby-2"], mode = "round_robin" }
+#   "skyblock" = ["sb-lobby-1"]
+#
+# Wiki: https://github.com/DemonZ-Development/VelocityNavigator/wiki/Contextual-Routing-Guide#groups
+[routing.contextual.groups]
+"bedwars" = ["bedwars-lobby-1", "bedwars-lobby-2"]
+
+# ── Source Mappings ────────────────────────────────────────────────
+# Map a source server name → contextual group name.
+# When a player leaves "bedwars-1", they'll be routed to the "bedwars" group.
+#
+# Wiki: https://github.com/DemonZ-Development/VelocityNavigator/wiki/Contextual-Routing-Guide#sources
+[routing.contextual.sources]
+"bedwars-1" = "bedwars"
+
+# ┌─────────────────────────────────────────────────────────────────┐
+# │  LOBBY FALLBACK — What happens when no lobbies are available    │
+# └─────────────────────────────────────────────────────────────────┘
+[lobby]
+
+# What to do when every lobby is offline or circuit-broken.
+#   "disconnect"      — Disconnect the player with a message
+#   "fallback_server" — Route to a backup fallback server instead
+# Wiki: https://github.com/DemonZ-Development/VelocityNavigator/wiki/Configuration-Guide#lobby-empty-lobby-strategy
+no_server_strategy = "disconnect"
+
+# The disconnect text is lobby.no_server_message in messages.toml.
+# Backup server name used when strategy = "fallback_server".
+# Wiki: https://github.com/DemonZ-Development/VelocityNavigator/wiki/Configuration-Guide#lobby-empty-lobby-strategy
+fallback_server = ""
+
+# ┌─────────────────────────────────────────────────────────────────┐
+# │  HEALTH CHECKS — Verify servers are alive before routing        │
+# └─────────────────────────────────────────────────────────────────┘
+[health_checks]
+
+# Ping candidate lobbies before sending a player. Prevents routing
+# to offline servers. Strongly recommended.
+# Wiki: https://github.com/DemonZ-Development/VelocityNavigator/wiki/Configuration-Guide#health_checks
+enabled = true
+
+# Timeout in milliseconds before a health-check ping is considered failed.
+# Wiki: https://github.com/DemonZ-Development/VelocityNavigator/wiki/Configuration-Guide#health_checks
+timeout_ms = 2500
+
+# Cache health results for this many seconds. Reduces network load.
+# Set to 0 to ping on every request (not recommended for large networks).
+# Wiki: https://github.com/DemonZ-Development/VelocityNavigator/wiki/Configuration-Guide#health_checks
+cache_seconds = 60
+
+# ┌─────────────────────────────────────────────────────────────────┐
+# │  CIRCUIT BREAKER — Automatic failure detection & recovery       │
+# │                                                                 │
+# │  State machine: CLOSED → OPEN → HALF_OPEN → CLOSED             │
+# │  Unhealthy servers are skipped until they prove they've recovered. │
+# └─────────────────────────────────────────────────────────────────┘
+[circuit_breaker]
+
+# Enable the circuit breaker. When enabled, servers that fail
+# health checks repeatedly are temporarily removed from routing.
+# Wiki: https://github.com/DemonZ-Development/VelocityNavigator/wiki/Configuration-Guide#circuit_breaker
+enabled = true
+
+# Number of consecutive failures before the circuit trips OPEN.
+# Wiki: https://github.com/DemonZ-Development/VelocityNavigator/wiki/Configuration-Guide#circuit_breaker
+failure_threshold = 3
+
+# Seconds to wait in OPEN state before allowing a test in HALF_OPEN.
+# Wiki: https://github.com/DemonZ-Development/VelocityNavigator/wiki/Configuration-Guide#circuit_breaker
+cooldown_seconds = 30
+
+# Successful test connections needed in HALF_OPEN to close the circuit.
+# Wiki: https://github.com/DemonZ-Development/VelocityNavigator/wiki/Configuration-Guide#circuit_breaker
+half_open_max_tests = 1
+
+# Player-facing text and menu labels are stored in messages.toml.
+
+# ┌─────────────────────────────────────────────────────────────────┐
+# │  UPDATE CHECKER — Automatic Modrinth version checking           │
+# └─────────────────────────────────────────────────────────────────┘
+[update_checker]
+
+# Enable periodic update checking via the Modrinth API.
+# Wiki: https://github.com/DemonZ-Development/VelocityNavigator/wiki/Configuration-Guide#update_checker
+enabled = true
+
+# Which release channel to follow: "release", "beta", or "alpha".
+# Wiki: https://github.com/DemonZ-Development/VelocityNavigator/wiki/Configuration-Guide#update_checker
+channel = "release"
+
+# Minutes between update checks (minimum: 30). Backoff is applied
+# automatically if the API returns 429 Too Many Requests.
+# Wiki: https://github.com/DemonZ-Development/VelocityNavigator/wiki/Configuration-Guide#update_checker
+check_interval = 60
+
+# Notify online admins (velocitynavigator.admin) when they join.
+# Wiki: https://github.com/DemonZ-Development/VelocityNavigator/wiki/Configuration-Guide#update_checker
+notify_admins = true
+
+# Suppress console log output for update checks. The /vn updatecheck
+# command still works regardless of this setting.
+# Wiki: https://github.com/DemonZ-Development/VelocityNavigator/wiki/Configuration-Guide#update_checker
+silent = true
+
+# ┌─────────────────────────────────────────────────────────────────┐
+# │  BEDROCK — Geyser/Floodgate integration for Bedrock players    │
+# └─────────────────────────────────────────────────────────────────┘
+[bedrock]
+
+# Manually enable Bedrock support. When false, auto_detect takes over.
+# Wiki: https://github.com/DemonZ-Development/VelocityNavigator/wiki/Configuration-Guide#bedrock-bedrockgeyser-support
+enabled = false
+
+# Automatically enable Bedrock features if Geyser/Floodgate is detected.
+# Wiki: https://github.com/DemonZ-Development/VelocityNavigator/wiki/Configuration-Guide#bedrock-bedrockgeyser-support
+auto_detect = true
+
+# Strip gradients, hover events, and click actions for Bedrock clients.
+# Bedrock doesn't support advanced MiniMessage formatting natively.
+# Wiki: https://github.com/DemonZ-Development/VelocityNavigator/wiki/Configuration-Guide#bedrock-bedrockgeyser-support
+strip_advanced_formatting = true
+
+# Use the Java UUID (mapped by Floodgate) for player affinity tracking.
+# Wiki: https://github.com/DemonZ-Development/VelocityNavigator/wiki/Configuration-Guide#bedrock-bedrockgeyser-support
+affinity_use_java_uuid = true
+
+# Show a native Bedrock SimpleForm GUI instead of chat-based menu.
+# Requires Floodgate to be installed alongside Geyser.
+use_gui_for_lobby = true
+
+# Bedrock form title/content/button text is stored in messages.toml.
+
+# ┌─────────────────────────────────────────────────────────────────┐
+# │  METRICS — Telemetry & monitoring                               │
+# └─────────────────────────────────────────────────────────────────┘
+[metrics]
+
+# Enable anonymous bStats telemetry. Helps us understand plugin usage.
+# Wiki: https://github.com/DemonZ-Development/VelocityNavigator/wiki/Configuration-Guide#metrics
+enabled = true
+
+# ── Prometheus Exporter ─────────────────────────────────────────────
+# Exposes real-time metrics at http://<bind_host>:<port>/metrics
+# Compatible with Prometheus, Grafana, and any OpenMetrics scraper.
+# Tip: Run /vn setup grafana to generate a ready-made dashboard!
+[metrics.prometheus]
+enabled = false
+port = 9225
+bind_host = "127.0.0.1"
+
+# Optional bearer token for authentication. Strongly recommended if
+# bind_host is not 127.0.0.1/localhost. Leave empty to disable.
+bearer_token = ""
+
+# ┌─────────────────────────────────────────────────────────────────┐
+# │  DASHBOARD — HTML operations panel                              │
+# └─────────────────────────────────────────────────────────────────┘
+# Serves a live HTML dashboard on a separate port. Shows lobby table,
+# routing distribution, affinity count, config summary, and live counters.
+# Optional operations dashboard. Disabled by default.
+[dashboard]
+
+# Enable the HTML dashboard. Default: false.
+enabled = false
+
+# Port for the dashboard HTTP server. Default: 9226.
+port = 9226
+
+# Bind address. Use 127.0.0.1 for local-only access, or 0.0.0.0 for
+# network exposure (only if firewalled or behind a token).
+bind_host = "127.0.0.1"
+
+# Bearer token for authentication. If set, requests must include
+# "Authorization: Bearer <token>". The browser login uses this header.
+# Never place bearer tokens in URLs. Leave empty
+# to allow unauthenticated access (only safe on loopback).
+bearer_token = ""
+
+# Auto-refresh interval in seconds. Default: 5.
+refresh_seconds = 5
+
+# ┌─────────────────────────────────────────────────────────────────┐
+# │  STORAGE — Credentials and session persistence                  │
+# └─────────────────────────────────────────────────────────────────┘
+# Authentication credentials, sessions, and other persisted data.
+# "file" stores data in the SQLite file below; "mysql" uses the
+# connection settings. A storage.toml file, when present, takes
+# precedence over this section.
+# Wiki: https://github.com/DemonZ-Development/VelocityNavigator/wiki/Storage-and-Databases
+[storage]
+
+# Storage backend: "file" (SQLite) or "mysql".
+type = "file"
+
+# MySQL host, port, database, and credentials. Ignored for "file".
+host = "localhost"
+port = 3306
+database = "velocitynavigator"
+username = "vn"
+password = ""
+
+# SQLite database file, used when type is "file".
+sqlite_file = "data/velocitynavigator.db"
+
+# Connection pool size and timeout in milliseconds.
+pool_size = 5
+connection_timeout_ms = 5000
+
+# ┌─────────────────────────────────────────────────────────────────┐
+# │  DEGRADATION — Graceful fallback when everything is down        │
+# └─────────────────────────────────────────────────────────────────┘
+[degradation]
+
+# When all health checks fail, use this fallback routing mode instead
+# of showing "no lobby found". Useful for keeping players connected.
+# Wiki: https://github.com/DemonZ-Development/VelocityNavigator/wiki/Configuration-Guide#degradation
+enabled = true
+
+# Fallback algorithm: "random", "round_robin", or "least_players".
+# Wiki: https://github.com/DemonZ-Development/VelocityNavigator/wiki/Configuration-Guide#degradation
+mode = "random"
+
+# ┌─────────────────────────────────────────────────────────────────┐
+# │  GEO ROUTING — Reserved compatibility settings                  │
+# └─────────────────────────────────────────────────────────────────┘
+[geo_routing]
+
+# Retained so older configuration files continue to load.
+# Geographic routing is opt-in; keep this disabled unless a geo.toml database is configured.
+enabled = false
+
+# Absolute path to the GeoLite2-Country.mmdb or GeoLite2-City.mmdb file.
+database_path = ""
+
+# Provider: "auto", "georestrict", "maxmind", or "ip_api".
+provider = "maxmind"
+fallback_enabled = true
+# Fallback provider or routing algorithm when no country affinity matches.
+fallback_mode = "ip_api"
+
+# Map backend server names to ISO 3166-1 alpha-2 country codes.
+[geo_routing.affinity_countries]
+
+# Authentication is disabled by default. Configure a dedicated holding backend before enabling it.
+# Wiki: https://github.com/DemonZ-Development/VelocityNavigator/wiki/Authentication-and-Security
+[auth]
+enabled = false
+algorithm = "argon2id"
+enable_2fa = false
+pin_length = 6
+void_world_holding = true
+holding_server = ""
+session_timeout_minutes = 60
+min_password_length = 8
+bedrock_form_enabled = true
+
+# Native proxy party system and leader-follow behavior.
+[party]
+enabled = true
+invite_timeout_seconds = 60
+follow_leader = true
+join_delay_ms = 250
+
+max_size = 20
+command = "party"
+chat_command = "p"
+permission = "none"
+
+# Capacity queue. holding_server names an existing backend in velocity.toml.
+# VN does not create that server or its world. Keep it outside lobby pools,
+# design its waiting world freely, and size it for the expected queue.
+[queue]
+enabled = true
+poll_seconds = 2
+notify_seconds = 5
+max_size = 500
+holding_server = ""
+
+command = "queue"
+permission = "none"
+
+# Redis enables multi-proxy dynamic registration and state synchronization.
+# Backends publish JSON registration events to vn:servers:register.
+[redis]
+enabled = true
+host = "redis"
+port = 6379
+username = ""
+password = ""
+ssl = false
+node_id = "3311bff5-fa8e-4391-914a-918c74b35a77"
+channel_prefix = "vn"
+sync_seconds = 5
+
+connect_timeout_ms = 3000
+read_timeout_ms = 10000
+reconnect_min_ms = 1000
+reconnect_max_ms = 30000
+registration_secret = "${CFG_REDIS_REGISTRATION_SECRET}"
+registration_max_age_seconds = 30
+allowed_registration_hosts = []
+
+# MOTD markers such as [STATE:IN_GAME] can remove backends from routing.
+[backend_states]
+enabled = true
+allowed = ["LOBBY", "WAITING", "AVAILABLE"]
+allow_unknown = true
+
+# Optional /vn server persistence into Velocity and the lobby registry.
+[server_management]
+enabled = true
+velocity_config = "velocity.toml"
+allow_overwrite = false
+
+# ┌─────────────────────────────────────────────────────────────────┐
+# │  DEBUG — Diagnostic logging                                     │
+# └─────────────────────────────────────────────────────────────────┘
+[debug]
+
+# Print detailed routing decisions, health check results, and cache
+# events to the proxy console. Useful for troubleshooting.
+# Wiki: https://github.com/DemonZ-Development/VelocityNavigator/wiki/Configuration-Guide#debug-and-top-level-settings
+verbose_logging = false
+
+# ╔══════════════════════════════════════════════════════════════════╗
+# ║  Thank you for using VelocityNavigator!                        ║
+# ║  Built with ❤ by DemonZ Development                            ║
+# ║                                                                 ║
+# ║  Questions? → https://discord.com/invite/GYsTt96ypf             ║
+# ║  Found a bug? → https://github.com/DemonZ-Development/           ║
+# ║                 VelocityNavigator/issues                        ║
+# ╚══════════════════════════════════════════════════════════════════╝
