@@ -23,15 +23,14 @@ services:
       - tunnel_net
       - game-core
 
-  server-announce:
-    image: ghcr.io/samuelh2005/serverannounce-backend:05866043ef7fd39c9817d3d04a3526a7f4d86177
+  redis:
+    image: redis:latest
+    container_name: redis
     restart: unless-stopped
-    environment:
-      CONFIG_PATH: /config.yaml
-    volumes:
-      - ./config/server-announce/config.yaml:/config.yaml:ro
     networks:
-      - tunnel_net
+      - game-core
+    ports:
+      - "6379:6379"
 
 networks:
   tunnel_net:
