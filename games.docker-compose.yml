@@ -22,36 +22,15 @@ services:
     networks:
       - game-core
       - minecraft
-  
-  lobby:
-    image: itzg/minecraft-server:latest
-    pull_policy: daily
-    tty: true
-    stdin_open: true
-    restart: unless-stopped
-    environment:
-      EULA: "TRUE"
-      TYPE: "FABRIC"
-      VERSION: "26.2"
-      MODS_FILE: "/mods/mods.txt"
-      MODE: "spectator"
-      LEVEL_TYPE: FLAT
-      GENERATOR_SETTINGS: >-
-          {
-              "layers": [
-                  {
-                      "block": "minecraft:air",
-                      "height": 1
-                  }
-              ],
-              "biome": "minecraft:void"
-          }
 
+  limbo:
+    image: ghcr.io/quozul/picolimbo:latest
+    restart: unless-stopped
+    container_name: limbo
+    environment:
       CFG_PROXY_SECRET: ${VELOCITY_FORWARDING_SECRET}
-      CFG_DB_PASSWORD: ${MARIA_DB_ROOT_PASSWORD}
     volumes:
-      - ./config/lobby/mods:/mods
-      - ./config/lobby/config:/config
+      - ./config/limbo/server.toml:/usr/src/app/server.toml
     networks:
       - game-core
       - minecraft

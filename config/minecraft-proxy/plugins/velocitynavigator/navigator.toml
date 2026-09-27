@@ -181,12 +181,12 @@ fallback_to_default = true
 #   "disconnect"      — Disconnect the player with a message
 #   "fallback_server" — Route to a backup fallback server instead
 # Wiki: https://github.com/DemonZ-Development/VelocityNavigator/wiki/Configuration-Guide#lobby-empty-lobby-strategy
-no_server_strategy = "disconnect"
+no_server_strategy = "fallback_server"
 
 # The disconnect text is lobby.no_server_message in messages.toml.
 # Backup server name used when strategy = "fallback_server".
 # Wiki: https://github.com/DemonZ-Development/VelocityNavigator/wiki/Configuration-Guide#lobby-empty-lobby-strategy
-fallback_server = ""
+fallback_server = "limbo"
 
 # ┌─────────────────────────────────────────────────────────────────┐
 # │  HEALTH CHECKS — Verify servers are alive before routing        │

@@ -90,7 +90,7 @@ decompressed-bytes-per-second = 5242880
 [servers]
 # Configure your servers here. Each key represents the server's name, and the value
 # represents the IP address of the server to connect to.
-lobby-1 = "lobby:25565"
+limbo = "limbo:25565"
 survival = "desktop-0uc53li.netbird.cloud:35565"
 city-world = "desktop-0uc53li.netbird.cloud:35566"
 testing = "desktop-0uc53li.netbird.cloud:35567"
@@ -98,7 +98,7 @@ testing = "desktop-0uc53li.netbird.cloud:35567"
 # In what order we should try servers when a player logs in or is kicked from a server.
 
 try = [
-    "lobby-1",
+    "limbo",
 ]
 
 [forced-hosts]
