@@ -30,7 +30,9 @@ services:
     environment:
       CFG_PROXY_SECRET: ${VELOCITY_FORWARDING_SECRET}
     volumes:
-      - ./config/limbo/server.toml:/usr/src/app/server.toml
+      - type: bind
+        source: ./config/limbo/server.toml
+        target: /usr/src/app/server.toml
     networks:
       - game-core
       - minecraft
