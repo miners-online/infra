@@ -467,7 +467,7 @@ allow_unknown = true
 
 # Optional /vn server persistence into Velocity and the lobby registry.
 [server_management]
-enabled = true
+enabled = false
 velocity_config = "velocity.toml"
 allow_overwrite = false
 
