@@ -107,7 +107,7 @@ balance_initial_join = true
 #   { server = "lobby-1", max_players = 100, weight = 2 } — with cap + weight
 #
 # Wiki: https://github.com/DemonZ-Development/VelocityNavigator/wiki/Configuration-Guide#routing-core
-default_lobbies = ["lobby-1", "lobby-2"]
+default_lobbies = ["lobby-1", "lobby-2", "limbo"]
 
 # How many times to retry a different lobby if the first connection fails.
 # Wiki: https://github.com/DemonZ-Development/VelocityNavigator/wiki/Configuration-Guide#routing-core
