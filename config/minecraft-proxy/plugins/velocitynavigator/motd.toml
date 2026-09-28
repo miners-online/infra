@@ -4,7 +4,7 @@ rotation_interval_seconds = 30
 motds = [
     """\
     <yellow>⛏ <blue>minersonline.uk<yellow>⛏ <red>[1.8/26.x]<reset>\n\
-    <i><u><aqua>BEDROCK + JAVA</aqua></u> <gold><b>+</b></gold> <green><gold><b>+</b></gold> <u>MINIGAMES</u></green></i>\
+    <i><u><aqua>BEDROCK + JAVA</aqua></u> <gold><b>+</b></gold> <green><u>MINIGAMES</u></green></i>\
     """,
     """\
     <yellow>⛏ <blue>minersonline.uk<yellow>⛏ <red>[1.8/26.x]<reset>\n\
