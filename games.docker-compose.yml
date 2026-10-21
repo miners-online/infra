@@ -36,3 +36,7 @@ networks:
   minecraft:
     external: true
   # No traefik network needed here, this is a game server, not a web service.
+
+volumes:
+  gate-cache:
+  gate-data:
