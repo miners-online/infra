@@ -27,8 +27,7 @@ flying_speed = 0.05
 
 [forwarding]
 # Disable forwarding
-method = "MODERN"
-secret = "${CFG_PROXY_SECRET}"
+method = "NONE"
 
 [world]
 # Custom spawn position as [x, y, z] coordinates

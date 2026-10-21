@@ -1,0 +1,84 @@
+config:
+  bind: 0.0.0.0:25565
+  bedrock: true
+  lite:
+    enabled: true
+    routes:
+      - host: play.minersonline.uk
+        backend: limbo:25565
+        fallback:
+          motd: |
+            §cMiners Online is offline.
+            §eCheck back later!
+          version:
+            name: '§cTry again later!'
+            protocol: -1
+      - host: survival.mc.minersonline.uk
+        backend: desktop-0uc53li.netbird.cloud:35565
+        fallback:
+          motd: |
+            §cMiners Online Survival is offline.
+            §eCheck back later!
+          version:
+            name: '§cTry again later!'
+            protocol: -1
+      - host: city-world.mc.minersonline.uk
+        backend: desktop-0uc53li.netbird.cloud:35566
+        fallback:
+          motd: |
+            §cMiners Online City World is offline.
+            §eCheck back later!
+          version:
+            name: '§cTry again later!'
+            protocol: -1
+      - host: testing.mc.minersonline.uk
+        backend: desktop-0uc53li.netbird.cloud:35567
+        fallback:
+          motd: |
+            §cMiners Online Testing is offline.
+            §eCheck back later!
+          version:
+            name: '§cTry again later!'
+            protocol: -1
+      - host: modded-survival.mc.minersonline.uk
+        backend: desktop-0uc53li.netbird.cloud:35568
+        fallback:
+          motd: |
+            §cMiners Online Modded Survival is offline.
+            §eCheck back later!
+          version:
+            name: '§cTry again later!'
+            protocol: -1
+      - host: modded-creative.mc.minersonline.uk
+        backend: desktop-0uc53li.netbird.cloud:35569
+        fallback:
+          motd: |
+            §cMiners Online Modded Creative is offline.
+            §eCheck back later!
+          version:
+            name: '§cTry again later!'
+            protocol: -1
+      - host: '*'
+        backend: limbo:25565
+        fallback:
+          motd: §eNo server available for this host.
+          version:
+            name: §eTry play.minersonline.uk
+            protocol: -1
+
+  connectionTimeout: 5s
+  readTimeout: 90s
+  debug: false
+  proxyProtocol: false
+  quota:
+    connections:
+      enabled: true
+      ops: 5
+      burst: 10
+      maxEntries: 1000
+
+connect:
+  enabled: false
+api:
+  enabled: false
+  bind: localhost:8080
