@@ -73,6 +73,11 @@ enable-player-address-logging = true
 # Configure your servers here. Each key represents the server's name, and the value
 # represents the IP address of the server to connect to.
 limbo = "limbo:25565"
+survival = "desktop-0uc53li.netbird.cloud:35565"
+city-world = "desktop-0uc53li.netbird.cloud:35566"
+testing = "desktop-0uc53li.netbird.cloud:35567"
+modded-survival = "desktop-0uc53li.netbird.cloud:35568"
+modded-creative = "desktop-0uc53li.netbird.cloud:35569"
 
 # In what order we should try servers when a player logs in or is kicked from a server.
 try = [
@@ -90,23 +95,23 @@ try = [
 ]
 
 "survival.mc.minersonline.uk" = [
-    "desktop-0uc53li.netbird.cloud:35565"
+    "survival"
 ]
 
 "city-world.mc.minersonline.uk" = [
-    "desktop-0uc53li.netbird.cloud:35566"
+    "city-world"
 ]
 
 "testing.mc.minersonline.uk" = [
-    "desktop-0uc53li.netbird.cloud:35567"
+    "testing"
 ]
 
 "modded-survival.mc.minersonline.uk" = [
-    "desktop-0uc53li.netbird.cloud:35568"
+    "modded-survival"
 ]
 
 "modded-creative.mc.minersonline.uk" = [
-	"desktop-0uc53li.netbird.cloud:35569"
+	"modded-creative"
 ]
 
 
