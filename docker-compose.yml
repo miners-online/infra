@@ -15,6 +15,7 @@ services:
       - proxy:/server
     ports:
       - '25565:25565' # Java Edition
+      - '25565:25565/udp' # Java Edition (udp)/Simple Voice Chat
       - '19132:19132/udp' # Bedrock Edition (udp)
       - '19132:19132/tcp' # Bedrock Edition (tcp)
     networks:
