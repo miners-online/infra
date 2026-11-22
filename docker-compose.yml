@@ -3,7 +3,6 @@ services:
   proxy:
     image: itzg/mc-proxy:latest
     restart: unless-stopped
-    working_dir: /data
     environment:
       - TYPE=VELOCITY
       - MINECRAFT_VERSION=26.3
