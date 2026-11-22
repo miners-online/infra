@@ -11,7 +11,8 @@ services:
       - VELOCITY_FORWARDING_SECRET=${VELOCITY_FORWARDING_SECRET}
       - MODRINTH_PROJECTS=simple-voice-chat:velocity-2.6.26
     volumes:
-      - ./config/proxy:/config
+      - ./config/proxy/velocity.toml:/config/velocity.toml:ro
+      - ./config/proxy/forwarding.secret.yml:/config/forwarding.secret.yml:ro
     ports:
       - '25565:25565' # Java Edition
       - '19132:19132/udp' # Bedrock Edition (udp)
