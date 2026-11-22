@@ -13,6 +13,7 @@ services:
     volumes:
       - ./config/proxy/velocity.toml:/config/velocity.toml:ro
       - ./config/proxy/forwarding.secret.yml:/config/forwarding.secret.yml:ro
+      - proxy:/server
     ports:
       - '25565:25565' # Java Edition
       - '19132:19132/udp' # Bedrock Edition (udp)
@@ -42,5 +43,4 @@ networks:
   # No traefik network needed here, this is a game server, not a web service.
 
 volumes:
-  gate-cache:
-  gate-data:
+  proxy:
