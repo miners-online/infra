@@ -27,7 +27,8 @@ flying_speed = 0.05
 
 [forwarding]
 # Disable forwarding
-method = "NONE"
+method = "MODERN"
+secret = "${VELOCITY_FORWARDING_SECRET}"
 
 [world]
 # Custom spawn position as [x, y, z] coordinates
@@ -59,11 +60,11 @@ min_y = -64
 teleport_message = "<red>You have reached the bottom of the world.</red>"
 
 [server_list]
-reply_to_status = false
+reply_to_status = true
 # Maximum count shown in your server list, does not affect the player limit
 max_players = 20
 # MOTD displayed in server lists
-message_of_the_day = "A Minecraft Server"
+message_of_the_day = "Server is currently unavailable, please wait."
 # Show actual online player count in your server list?
 show_online_player_count = true
 server_icon = "server-icon.png"

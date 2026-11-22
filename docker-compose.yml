@@ -1,19 +1,20 @@
 name: miners-online-games
 services:
-  gate:
-    image: ghcr.io/minekube/gate/jre:latest
+  proxy:
+    image: itzg/mc-proxy:latest
     restart: unless-stopped
-    container_name: gate
     working_dir: /data
     environment:
-      - GATE_CONFIG=/config/gate.yml
+      - TYPE=VELOCITY
+      - REPLACE_ENV_VARIABLES=TRUE
+      - VELOCITY_FORWARDING_SECRET=${VELOCITY_FORWARDING_SECRET}
+      - MODRINTH_PROJECTS=simple-voice-chat:velocity-2.6.26
     volumes:
-      - ./config/gate:/config/:ro
-      - gate-cache:/var/cache/gate
-      - gate-data:/data
+      - ./config/proxy:/config
     ports:
       - '25565:25565' # Java Edition
-      - '19132:19132/udp' # Bedrock Edition
+      - '19132:19132/udp' # Bedrock Edition (udp)
+      - '19132:19132/tcp' # Bedrock Edition (tcp)
     networks:
       - game-core
       - minecraft
@@ -21,7 +22,8 @@ services:
   limbo:
     image: ghcr.io/quozul/picolimbo:latest
     restart: unless-stopped
-    container_name: limbo
+    environment:
+      - VELOCITY_FORWARDING_SECRET=${VELOCITY_FORWARDING_SECRET}
     volumes:
       - type: bind
         source: ./config/limbo/server.toml
