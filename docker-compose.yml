@@ -11,9 +11,7 @@ services:
       - MODRINTH_PROJECTS=simple-voice-chat:velocity-2.6.26
       - JVM_OPTS=-Dvelocity.max-known-packs=1000,-Dvelocity.packet-decode-logging=true
     volumes:
-      - ./config/proxy/velocity.toml:/config/velocity.toml:ro
-      - ./config/proxy/forwarding.secret.yml:/config/forwarding.secret.yml:ro
-      - ./config/proxy/:/config/
+      - ./config/proxy/:/config:ro
       - proxy:/server
     ports:
       - '25565:25565' # Java Edition
