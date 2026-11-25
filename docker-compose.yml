@@ -21,7 +21,6 @@ services:
       - '19132:19132/udp' # Bedrock Edition (udp)
       - '19132:19132/tcp' # Bedrock Edition (tcp)
     networks:
-      - game-core
       - minecraft
 
   limbo:
@@ -34,15 +33,10 @@ services:
         source: ./config/limbo/server.toml
         target: /usr/src/app/server.toml
     networks:
-      - game-core
       - minecraft
 
 networks:
-  game-core:
-    external: true
   minecraft:
-    external: true
-  # No traefik network needed here, this is a game server, not a web service.
 
 volumes:
   proxy:
